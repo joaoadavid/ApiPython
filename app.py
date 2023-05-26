@@ -1,12 +1,12 @@
-import mysql.connector
+import psycopg2
 from flask import Flask, jsonify, render_template, request
 
 app = Flask(__name__)
 
 # Configurações do banco de dados
 db_config = {
-    'user': 'root',
-    'password': 'root',
+    'user': 'postgres',
+    'password': '1234',
     'host': 'localhost',
     'database': 'calculadora_db'
 }
@@ -34,7 +34,13 @@ def calcular_super_fatorial(numero):
         return super_fatorial
 
 def obter_conexao():
-    return mysql.connector.connect(**db_config)
+    conn = psycopg2.connect(
+        host=db_config['host'],
+        database=db_config['database'],
+        user=db_config['user'],
+        password=db_config['password']
+    )
+    return conn
 
 @app.route('/calculadora', methods=['GET'])
 def obter_calculos():
